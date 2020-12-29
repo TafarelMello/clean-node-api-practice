@@ -4,5 +4,8 @@
   "description": "project to practice node.js, tdd and clean architecture.",
   "main": "index.js",
   "author": "Tafarel Mello",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "git-commit-msg-linter": "^3.0.0"
+  }
 }
