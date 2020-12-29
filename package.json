@@ -1,0 +1,8 @@
+{
+  "name": "clean-node-api-practice",
+  "version": "1.0.0",
+  "description": "project to practice node.js, tdd and clean architecture.",
+  "main": "index.js",
+  "author": "Tafarel Mello",
+  "license": "MIT"
+}
