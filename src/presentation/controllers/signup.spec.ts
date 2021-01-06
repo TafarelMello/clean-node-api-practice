@@ -17,6 +17,7 @@ const makeEmailValidator = (): IEmailValidator => {
   return new EmailValidatorStub()
 }
 
+// factory para emitir um erro
 const makeEmailValidatorWithError = (): IEmailValidator => {
   class EmailValidatorStub implements IEmailValidator {
     isValid (email: string): boolean {
@@ -130,9 +131,30 @@ describe('SignUp Controler', () => {
     expect(isValidSpy).toHaveBeenCalledWith('any_email@gmail.com')
   })
 
-  test('Should return 500 if EmailValidator throws', () => {
+  test('Should return 500 if EmailValidator throws using makeEmailValidatorWithError', () => {
     const emailValidatorStub = makeEmailValidatorWithError()
     const sut = new SignUpController(emailValidatorStub)
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@gmail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const httpResponse = sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('Should return 500 if EmailValidator throws using mockImplementation', () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementation(
+      () => {
+        throw new Error()
+      }
+    )
 
     const httpRequest = {
       body: {
