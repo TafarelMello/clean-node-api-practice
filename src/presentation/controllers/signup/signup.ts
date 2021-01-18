@@ -1,7 +1,12 @@
-import { IHttpResponse, IHttpRequest, IEmailValidator, IController } from './protocols'
-import { badRequest, serverError } from './helpers/helper'
-import { MissingParamError, InvalidParamError } from './errors'
-import { IAddAccount } from '../../domain/usecases/iadd-account'
+import {
+  IHttpResponse,
+  IHttpRequest,
+  IController,
+  IEmailValidator,
+  IAddAccount
+} from './signup-protocols'
+import { badRequest, serverError } from '../helpers/helper'
+import { MissingParamError, InvalidParamError } from '../errors'
 
 export class SignUpController implements IController {
   private readonly emailValidator: IEmailValidator
@@ -14,7 +19,12 @@ export class SignUpController implements IController {
 
   handle (httpRequest: IHttpRequest): IHttpResponse {
     try {
-      const requireFields = ['name', 'email', 'password', 'passwordConfirmation']
+      const requireFields = [
+        'name',
+        'email',
+        'password',
+        'passwordConfirmation'
+      ]
 
       for (const field of requireFields) {
         if (!httpRequest.body[field]) {
