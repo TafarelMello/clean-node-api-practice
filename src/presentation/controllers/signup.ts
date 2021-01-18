@@ -1,12 +1,15 @@
 import { IHttpResponse, IHttpRequest, IEmailValidator, IController } from './protocols'
 import { badRequest, serverError } from './helpers/helper'
 import { MissingParamError, InvalidParamError } from './errors'
+import { IAddAccount } from '../../domain/usecases/iadd-account'
 
 export class SignUpController implements IController {
   private readonly emailValidator: IEmailValidator
+  private readonly addAccount: IAddAccount
 
-  constructor (emailValidator: IEmailValidator) {
+  constructor (emailValidator: IEmailValidator, addAccount: IAddAccount) {
     this.emailValidator = emailValidator
+    this.addAccount = addAccount
   }
 
   handle (httpRequest: IHttpRequest): IHttpResponse {
@@ -19,7 +22,7 @@ export class SignUpController implements IController {
         }
       }
 
-      const { email, password, passwordConfirmation } = httpRequest.body
+      const { name, email, password, passwordConfirmation } = httpRequest.body
 
       if (password !== passwordConfirmation) {
         return badRequest(new InvalidParamError('passwordConfirmation'))
@@ -31,6 +34,11 @@ export class SignUpController implements IController {
       }
 
       // criar a conta delegada por outra classe
+      this.addAccount.add({
+        name,
+        email,
+        password
+      })
     } catch (error) {
       // pegar o error depois pra criar um log
       return serverError()
