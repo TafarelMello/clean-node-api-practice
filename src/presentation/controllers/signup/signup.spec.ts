@@ -1,6 +1,11 @@
 import { InvalidParamError, MissingParamError, ServerError } from '../errors'
 import { SignUpController } from './signup'
-import { IAccount, IAddAccount, IAddAccountModel, IEmailValidator } from './signup-protocols'
+import {
+  IAccount,
+  IAddAccount,
+  IAddAccountModel,
+  IEmailValidator
+} from './signup-protocols'
 
 interface SutType {
   sut: SignUpController
@@ -216,5 +221,27 @@ describe('SignUp Controler', () => {
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('Should return 200 if valid data is provided', () => {
+    const { sut } = makeSut()
+
+    const httpResquest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@gmail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    }
+
+    const httpResponse = sut.handle(httpResquest)
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email@gmail.com',
+      password: 'valid_password'
+    })
   })
 })
