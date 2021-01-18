@@ -44,11 +44,16 @@ export class SignUpController implements IController {
       }
 
       // criar a conta delegada por outra classe
-      this.addAccount.add({
+      const account = this.addAccount.add({
         name,
         email,
         password
       })
+
+      return {
+        statusCode: 200,
+        body: account
+      }
     } catch (error) {
       // pegar o error depois pra criar um log
       return serverError()
