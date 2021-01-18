@@ -17,7 +17,7 @@ export class SignUpController implements IController {
     this.addAccount = addAccount
   }
 
-  handle (httpRequest: IHttpRequest): IHttpResponse {
+  async handle (httpRequest: IHttpRequest): Promise<IHttpResponse> {
     try {
       const requireFields = [
         'name',
@@ -44,7 +44,7 @@ export class SignUpController implements IController {
       }
 
       // criar a conta delegada por outra classe
-      const account = this.addAccount.add({
+      const account = await this.addAccount.add({
         name,
         email,
         password
